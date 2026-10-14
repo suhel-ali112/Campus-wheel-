@@ -1,0 +1,368 @@
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #f9fafe 0%, #f0f5ff 100%);
+            color: #171b2b;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        :root {
+            --primary: #2a3ff2;
+            --primary-light: #dce3ff;
+            --secondary: #10b981;
+            --accent: #8b5cf6;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(145deg, #ff7e5f, #feb47b);
+            --gradient-3: linear-gradient(145deg, #56ccf2, #2f80ed);
+            --card-white: rgba(255,255,255,0.85);
+            --backdrop-blur: blur(12px);
+            --shadow-color: rgba(0,20,100,0.1);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+
+        /* ----- responsive navigation (glass) ----- */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 0;
+            flex-wrap: wrap;
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: var(--backdrop-blur);
+            border-radius: 80px;
+            padding-left: 28px;
+            padding-right: 28px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 15px 30px -15px var(--shadow-color);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            background: var(--gradient-1);
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 10px 20px -7px var(--primary);
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.8rem;
+            letter-spacing: -0.02em;
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 600;
+            color: #1e293b;
+            transition: 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px 24px;
+            border-radius: 60px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            background: white;
+            color: #1e293b;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.02);
+            text-decoration: none;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            box-shadow: 0 12px 18px -10px var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.03);
+            box-shadow: 0 20px 24px -12px var(--primary);
+        }
+
+        /* --- slider homepage (swiper) --- */
+        .swiper {
+            width: 100%;
+            border-radius: 48px;
+            margin: 30px 0 20px;
+            box-shadow: 0 30px 40px -25px #1e2b4f;
+        }
+
+        .swiper-slide {
+            background: var(--gradient-3);
+            color: white;
+            height: 380px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            background-size: cover;
+        }
+
+        .slide1 { background: linear-gradient(115deg, #0d0b34, #1f0c4e), url('https://placehold.co/1600x600/18244f/5f7cff?text=🚀+Ride+to+Gangoh'); background-blend-mode: overlay; }
+        .slide2 { background: linear-gradient(115deg, #1d3b3a, #1d4d4b), url('https://placehold.co/1600x600/0b4127/4caf7f?text=🛵+Safe+&+Verified'); background-blend-mode: overlay; }
+        .slide3 { background: linear-gradient(115deg, #4a1d3b, #611f4a), url('https://placehold.co/1600x600/35204c/d38bff?text=🎓+Campus+to+Campus'); background-blend-mode: overlay; }
+
+        .slide-content {
+            text-align: center;
+            backdrop-filter: blur(6px);
+            background: rgba(0,0,0,0.2);
+            padding: 24px 48px;
+            border-radius: 120px;
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+
+        /* --- animated hover cards (feature) --- */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin: 50px 0;
+        }
+
+        .hover-card {
+            background: var(--card-white);
+            backdrop-filter: var(--backdrop-blur);
+            padding: 32px 24px;
+            border-radius: 36px;
+            border: 1px solid rgba(255,255,255,0.7);
+            box-shadow: 0 20px 35px -15px var(--shadow-color);
+            transition: all 0.25s ease;
+            text-align: center;
+        }
+
+        .hover-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 32px 45px -12px var(--primary);
+            background: white;
+            border-color: var(--primary-light);
+        }
+
+        .hover-card i {
+            font-size: 3rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        /* --- ride search filter --- */
+        .search-section {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: var(--backdrop-blur);
+            border-radius: 80px;
+            padding: 20px 30px;
+            margin: 40px 0;
+            border: 1px solid white;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-input {
+            flex: 2 1 260px;
+            padding: 16px 28px;
+            border-radius: 60px;
+            border: 1px solid #e9ecf5;
+            font-size: 1rem;
+            background: white;
+            box-shadow: inset 0 2px 8px #edeef3;
+        }
+
+        .search-btn {
+            background: var(--gradient-1);
+            border: none;
+            color: white;
+            padding: 16px 42px;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .search-btn:hover { opacity: 0.9; }
+
+        /* --- ride cards (with animation) --- */
+        .ride-cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 28px;
+            margin: 30px 0;
+        }
+
+        .ride-card {
+            background: white;
+            border-radius: 32px;
+            padding: 24px;
+            box-shadow: 0 15px 30px -12px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.8);
+            transition: 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            backdrop-filter: blur(4px);
+        }
+
+        .ride-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 25px 35px -16px var(--primary);
+        }
+
+        .ride-header { display: flex; justify-content: space-between; }
+        .rider-avatar { background: var(--primary-light); border-radius: 30px; padding: 8px 16px; font-weight: 600; }
+        .route { font-weight: 700; font-size: 1.3rem; }
+        .price { background: var(--secondary); color: white; padding: 6px 16px; border-radius: 40px; font-weight: 700; align-self: flex-start; }
+
+        /* --- testimonials (swiper minified) --- */
+        .testimonials {
+            background: rgba(255,255,255,0.5);
+            backdrop-filter: var(--backdrop-blur);
+            border-radius: 48px;
+            padding: 32px 24px;
+            margin: 50px 0;
+        }
+
+        .testi-grid {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            padding: 16px 4px;
+            scrollbar-width: thin;
+        }
+        .testi-card {
+            min-width: 280px;
+            background: white;
+            border-radius: 32px;
+            padding: 24px;
+            box-shadow: 0 6px 18px #d9e2f0;
+        }
+
+        /* --- google campus map (iframe placeholder) --- */
+        .map-container {
+            border-radius: 48px;
+            overflow: hidden;
+            margin: 40px 0;
+            height: 350px;
+            border: 3px solid white;
+            box-shadow: var(--shadow-color) 0 25px 35px;
+        }
+
+        /* --- live bike tracking (fake animation) --- */
+        .live-tracking {
+            background: linear-gradient(120deg, #0b1f3b, #192f55);
+            border-radius: 48px;
+            padding: 32px;
+            color: white;
+            margin: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .bike-move {
+            animation: moveBike 2s infinite alternate;
+            font-size: 3rem;
+        }
+        @keyframes moveBike {
+            from { transform: translateX(0); }
+            to { transform: translateX(40px); }
+        }
+
+        /* --- ride booking notification (popup mock) --- */
+        .notification-demo {
+            background: #1e293b;
+            color: white;
+            padding: 18px 32px;
+            border-radius: 80px;
+            display: inline-flex;
+            align-items: center;
+            gap: 18px;
+            margin: 10px 0 30px;
+            border-left: 10px solid var(--secondary);
+        }
+
+        /* --- profile dashboard & ride history (cards) --- */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 28px;
+            margin: 40px 0;
+        }
+        .profile-card {
+            background: white;
+            border-radius: 48px;
+            padding: 32px;
+            box-shadow: 0 20px 35px -12px #cdd9f0;
+            border: 1px solid white;
+        }
+        .history-list {
+            background: white;
+            border-radius: 48px;
+            padding: 32px;
+        }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #eef2f6;
+            padding: 18px 0;
+        }
+
+        .footer {
+            padding: 40px 0;
+            text-align: center;
+            color: #2b3448;
+        }
+
+        @media (max-width: 700px) {
+            .dashboard { grid-template-columns: 1fr; }
+            .navbar { flex-direction: column; }
+        }

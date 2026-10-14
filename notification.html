@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusWheel · live notification center</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Outfit + Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0b1428, #1a1f3a);
+            color: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        /* main notification hub */
+        .notification-hub {
+            max-width: 1300px;
+            width: 100%;
+            background: rgba(18, 26, 48, 0.85);
+            backdrop-filter: blur(16px);
+            border-radius: 5rem;
+            padding: 3rem 3.5rem;
+            border: 3px solid rgba(242, 113, 158, 0.3);
+            box-shadow: 0 60px 80px -30px #00000080;
+        }
+
+        /* header */
+        .notif-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            gap: 2rem;
+            border-bottom: 4px dashed #F2719E;
+            padding-bottom: 2rem;
+        }
+
+        .notif-header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(145deg, #F2719E, #9f7aea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .live-indicator {
+            background: #F2719E;
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 4rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 0 25px #F2719E;
+        }
+
+        .pulse-dot {
+            width: 14px;
+            height: 14px;
+            background: #8effb2;
+            border-radius: 50%;
+            box-shadow: 0 0 0 5px rgba(142, 255, 178, 0.3);
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* main notification grid */
+        .notif-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.9fr;
+            gap: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* left panel - live feed */
+        .feed-panel {
+            background: rgba(25, 35, 65, 0.7);
+            backdrop-filter: blur(4px);
+            border-radius: 3.5rem;
+            padding: 2.2rem;
+            border: 2px solid #F2719E;
+        }
+
+        .panel-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 3px dashed #F2719E;
+            padding-bottom: 1rem;
+        }
+
+        .notification-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            max-height: 450px;
+            overflow-y: auto;
+            padding-right: 1rem;
+        }
+
+        .notification-feed::-webkit-scrollbar {
+            width: 8px;
+        }
+        .notification-feed::-webkit-scrollbar-thumb {
+            background: #F2719E;
+            border-radius: 10px;
+        }
+
+        .notif-item {
+            background: #1e2a4a;
+            border-radius: 2.5rem;
+            padding: 1.6rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            border: 2px solid transparent;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .notif-item:hover {
+            border-color: #F2719E;
+            background: #253458;
+            transform: translateX(8px);
+        }
+
+        .notif-item.unread {
+            border-left: 8px solid #F2719E;
+            background: #253a68;
+        }
+
+        .notif-icon {
+            background: #F2719E30;
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #F2719E;
+        }
+
+        .notif-content {
+            flex: 1;
+        }
+
+        .notif-content h4 {
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .notif-content p {
+            font-size: 1.2rem;
+            color: #b5c4ff;
+        }
+
+        .notif-time {
+            font-size: 1.1rem;
+            color: #8f9fd5;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notif-badge {
+            background: #F2719E;
+            color: white;
+            border-radius: 2rem;
+            padding: 0.2rem 1rem;
+            font-size: 1rem;
+        }
+
+        /* right panel - controls & stats */
+        .control-panel {
+            background: rgba(25, 35, 65, 0.7);
+            backdrop-filter: blur(4px);
+            border-radius: 3.5rem;
+            padding: 2.2rem;
+            border: 2px solid #F2719E;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .stats-card {
+            background: #1e2a4a;
+            border-radius: 2.5rem;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.4rem;
+            border-bottom: 2px solid #33415e;
+            padding-bottom: 0.8rem;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            color: #F2719E;
+            font-size: 1.8rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .notif-btn {
+            background: linear-gradient(145deg, #1F2B96, #F2719E);
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 1.4rem;
+            padding: 1.4rem;
+            border-radius: 4rem;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .notif-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px #F2719E;
+        }
+
+        .notif-btn.secondary {
+            background: transparent;
+            border: 2px solid #F2719E;
+            color: #F2719E;
+        }
+
+        .notif-btn.secondary:hover {
+            background: #F2719E20;
+        }
+
+        /* demo toast container */
+        .toast-container {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: #1e2a4a;
+            border-left: 8px solid #F2719E;
+            border-radius: 3rem;
+            padding: 1.5rem 2.5rem;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 600;
+            box-shadow: 0 20px 40px black;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            animation: toastIn 0.3s ease;
+            pointer-events: auto;
+            border: 2px solid #F2719E;
+        }
+
+        @keyframes toastIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .toast i {
+            color: #F2719E;
+            font-size: 2rem;
+        }
+
+        /* preferences panel */
+        .pref-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .pref-tag {
+            background: #1e2a4a;
+            padding: 0.8rem 1.5rem;
+            border-radius: 3rem;
+            font-size: 1.2rem;
+            border: 2px solid #F2719E;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .pref-tag.active {
+            background: #F2719E;
+            color: white;
+        }
+
+        /* responsive */
+        @media (max-width: 900px) {
+            .notif-grid {
+                grid-template-columns: 1fr;
+            }
+            .notification-hub {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- toast container for live notifications -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- main notification hub -->
+<div class="notification-hub">
+    <!-- header -->
+    <div class="notif-header">
+        <h1><i class="fas fa-bell"></i> notification center</h1>
+        <div class="live-indicator"><span class="pulse-dot"></span> live updates</div>
+    </div>
+
+    <!-- grid -->
+    <div class="notif-grid">
+        <!-- LEFT: live feed panel -->
+        <div class="feed-panel">
+            <div class="panel-title">
+                <i class="fas fa-stream" style="color:#F2719E;"></i> live feed · recent alerts
+            </div>
+            <div class="notification-feed" id="notificationFeed">
+                <!-- notifications will be injected via JS, but we have static base -->
+                <div class="notif-item unread" data-id="1">
+                    <div class="notif-icon"><i class="fas fa-motorcycle"></i></div>
+                    <div class="notif-content">
+                        <h4>Ride request accepted</h4>
+                        <p>Anjali will pick you up at 8:25 AM</p>
+                    </div>
+                    <div class="notif-time">2 min ago <span class="notif-badge">new</span></div>
+                </div>
+                <div class="notif-item" data-id="2">
+                    <div class="notif-icon"><i class="fas fa-location-dot"></i></div>
+                    <div class="notif-content">
+                        <h4>Rider nearby</h4>
+                        <p>Ravi is 0.3 km from your location</p>
+                    </div>
+                    <div class="notif-time">15 min ago</div>
+                </div>
+                <div class="notif-item unread" data-id="3">
+                    <div class="notif-icon"><i class="fas fa-shield-heart"></i></div>
+                    <div class="notif-content">
+                        <h4>Safety tip</h4>
+                        <p>Share your ride with trusted contacts</p>
+                    </div>
+                    <div class="notif-time">32 min ago <span class="notif-badge">new</span></div>
+                </div>
+                <div class="notif-item" data-id="4">
+                    <div class="notif-icon"><i class="fas fa-credit-card"></i></div>
+                    <div class="notif-content">
+                        <h4>Payment successful</h4>
+                        <p>₹25 paid for ride #CW1234</p>
+                    </div>
+                    <div class="notif-time">1 hour ago</div>
+                </div>
+                <div class="notif-item" data-id="5">
+                    <div class="notif-icon"><i class="fas fa-star"></i></div>
+                    <div class="notif-content">
+                        <h4>New rating received</h4>
+                        <p>You got 5 stars from Priya</p>
+                    </div>
+                    <div class="notif-time">3 hours ago</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: controls and stats -->
+        <div class="control-panel">
+            <!-- stats summary -->
+            <div class="stats-card">
+                <h3 style="font-size:2rem; margin-bottom:0.5rem;"><i class="fas fa-chart-simple" style="color:#F2719E;"></i> notification stats</h3>
+                <div class="stat-row">
+                    <span>unread</span>
+                    <span class="stat-value" id="unreadCount">3</span>
+                </div>
+                <div class="stat-row">
+                    <span>total today</span>
+                    <span class="stat-value">12</span>
+                </div>
+                <div class="stat-row">
+                    <span>ride requests</span>
+                    <span class="stat-value">5</span>
+                </div>
+            </div>
+
+            <!-- action buttons -->
+            <div class="action-buttons">
+                <button class="notif-btn" id="markAllRead"><i class="fas fa-check-double"></i> mark all as read</button>
+                <button class="notif-btn secondary" id="clearAllBtn"><i class="fas fa-trash-alt"></i> clear all</button>
+                <button class="notif-btn secondary" id="simulateRideRequest"><i class="fas fa-plus-circle"></i> simulate new ride request</button>
+                <button class="notif-btn secondary" id="simulateEmergency"><i class="fas fa-exclamation-triangle"></i> simulate emergency alert</button>
+            </div>
+
+            <!-- notification preferences (demo) -->
+            <div style="margin-top: 1rem;">
+                <h4 style="font-size:1.5rem; margin-bottom:1rem;">🔔 notification types</h4>
+                <div class="pref-section">
+                    <span class="pref-tag active"><i class="fas fa-motorcycle"></i> rides</span>
+                    <span class="pref-tag active"><i class="fas fa-shield"></i> safety</span>
+                    <span class="pref-tag"><i class="fas fa-credit-card"></i> payments</span>
+                    <span class="pref-tag active"><i class="fas fa-star"></i> reviews</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- footer note -->
+    <div style="margin-top: 2.5rem; text-align: center; color: #8f9fd5; border-top: 2px dashed #F2719E; padding-top: 2rem;">
+        <i class="fas fa-circle-check" style="color:#F2719E;"></i> notifications are synced across devices · tap any item to mark as read
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ========== NOTIFICATION SYSTEM ==========
+        const feed = document.getElementById('notificationFeed');
+        const unreadSpan = document.getElementById('unreadCount');
+        const toastContainer = document.getElementById('toastContainer');
+
+        // helper: update unread counter
+        function updateUnreadCount() {
+            const unreadItems = document.querySelectorAll('.notif-item.unread');
+            unreadSpan.textContent = unreadItems.length;
+        }
+
+        // helper: add a new notification to feed (and optionally show toast)
+        function addNotification(title, message, type = 'info', showToast = true) {
+            const icons = {
+                'ride': '<i class="fas fa-motorcycle"></i>',
+                'safety': '<i class="fas fa-shield-heart"></i>',
+                'payment': '<i class="fas fa-credit-card"></i>',
+                'info': '<i class="fas fa-bell"></i>'
+            };
+            const icon = icons[type] || icons.info;
+
+            const now = new Date();
+            const timeStr = now.getMinutes() + ' min ago';
+
+            const notifDiv = document.createElement('div');
+            notifDiv.className = 'notif-item unread';
+            notifDiv.setAttribute('data-id', 'new-' + Date.now());
+            notifDiv.innerHTML = `
+                <div class="notif-icon">${icon}</div>
+                <div class="notif-content">
+                    <h4>${title}</h4>
+                    <p>${message}</p>
+                </div>
+                <div class="notif-time">just now <span class="notif-badge">new</span></div>
+            `;
+
+            // add to top of feed
+            feed.prepend(notifDiv);
+            
+            // add click handler to mark as read
+            notifDiv.addEventListener('click', function() {
+                this.classList.remove('unread');
+                updateUnreadCount();
+            });
+
+            updateUnreadCount();
+
+            // show toast if needed
+            if (showToast) {
+                showToastMessage(title, message, icon);
+            }
+        }
+
+        // toast function
+        function showToastMessage(title, message, iconHtml) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `
+                ${iconHtml || '<i class="fas fa-bell"></i>'}
+                <div>
+                    <strong>${title}</strong><br>
+                    <span style="font-size:1.1rem;">${message}</span>
+                </div>
+            `;
+            toastContainer.appendChild(toast);
+
+            // remove after 4 seconds
+            setTimeout(() => {
+                toast.remove();
+            }, 4000);
+        }
+
+        // mark all as read
+        document.getElementById('markAllRead').addEventListener('click', function() {
+            document.querySelectorAll('.notif-item.unread').forEach(item => {
+                item.classList.remove('unread');
+                // remove badge if exists
+                const badge = item.querySelector('.notif-badge');
+                if (badge) badge.remove();
+            });
+            updateUnreadCount();
+            showToastMessage('All notifications read', 'marked all as read', '<i class="fas fa-check-circle"></i>');
+        });
+
+        // clear all (remove from feed)
+        document.getElementById('clearAllBtn').addEventListener('click', function() {
+            feed.innerHTML = '';
+            updateUnreadCount();
+            showToastMessage('Cleared', 'all notifications removed', '<i class="fas fa-trash"></i>');
+        });
+
+        // simulate ride request
+        document.getElementById('simulateRideRequest').addEventListener('click', function() {
+            addNotification(
+                '🚲 New ride request',
+                'Kunal wants to ride from Saharanpur to University',
+                'ride',
+                true
+            );
+        });
+
+        // simulate emergency alert
+        document.getElementById('simulateEmergency').addEventListener('click', function() {
+            addNotification(
+                '🚨 EMERGENCY ALERT',
+                'Campus security: rider reported safe',
+                'safety',
+                true
+            );
+            // extra strong toast
+            showToastMessage('🚨 EMERGENCY', 'campus security notified', '<i class="fas fa-exclamation-triangle"></i>');
+        });
+
+        // make existing items clickable to mark as read
+        document.querySelectorAll('.notif-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.remove('unread');
+                // remove badge if present
+                const badge = this.querySelector('.notif-badge');
+                if (badge) badge.remove();
+                updateUnreadCount();
+            });
+        });
+
+        // simulate periodic notifications (every 20 seconds - demo only)
+        let counter = 0;
+        setInterval(() => {
+            if (counter % 3 === 0) {
+                addNotification('📍 rider nearby', 'Meera is 0.2 km from you', 'info', true);
+            } else if (counter % 3 === 1) {
+                addNotification('⭐ new rating', 'You received 5 stars from Anjali', 'payment', true);
+            } else {
+                addNotification('✅ ride completed', 'Trip to University finished', 'ride', true);
+            }
+            counter++;
+        }, 20000); // every 20 sec for demo (adjust as needed)
+
+        // pref-tag toggle (demo)
+        document.querySelectorAll('.pref-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+
+        // initial unread count
+        updateUnreadCount();
+    })();
+</script>
+
+</body>
+</html>

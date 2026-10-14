@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusWheel · big & bold ride share</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Outfit + Plus Jakarta Sans for massive modern look -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f0f5ff;
+            color: #0f1a2f;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1,
+        h2,
+        h3,
+        .logo-font {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* ===== BIGGER, BOULDER GRADIENT UI ===== */
+        .gradient-bg {
+            background: linear-gradient(145deg, #1F2B96, #632B8C, #F2719E);
+            background-size: 250% 250%;
+            animation: gradientFlow 14s ease infinite;
+        }
+
+        @keyframes gradientFlow {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* ----- RESPONSIVE NAVIGATION (bigger) ----- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 6%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            box-shadow: 0 20px 40px -10px rgba(99, 43, 140, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            flex-wrap: wrap;
+            border-bottom: 2px solid rgba(242, 113, 158, 0.25);
+        }
+
+        .logo {
+            font-size: 2.4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1F2B96, #F2719E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #1e293b;
+            transition: 0.2s;
+            border-bottom: 3px solid transparent;
+            padding-bottom: 6px;
+        }
+
+        .nav-links a:hover {
+            border-bottom-color: #F2719E;
+            color: #1F2B96;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .avatar-large {
+            background: linear-gradient(145deg, #1F2B96, #F2719E);
+            width: 54px;
+            height: 54px;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.8rem;
+            box-shadow: 0 10px 20px rgba(242, 113, 158, 0.4);
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 2.5rem;
+            color: #1F2B96;
+        }
+
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+        }
+
+        /* ===== HERO SLIDER (BIG & ATTRACTIVE) ===== */
+        .hero-slider {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 2rem;
+            padding: 3rem 6%;
+            background: radial-gradient(circle at 80% 30%, #ffe8f5, #e3eaff);
+            scroll-behavior: smooth;
+        }
+
+        .hero-slider::-webkit-scrollbar {
+            height: 12px;
+        }
+
+        .hero-slider::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, #1F2B96, #F2719E);
+            border-radius: 20px;
+        }
+
+        .slide-card {
+            scroll-snap-align: start;
+            min-width: 80%;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 4rem;
+            padding: 3rem 5rem;
+            box-shadow: 0 40px 60px -10px rgba(31, 43, 150, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .slide-content h2 {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(145deg, #1F2B96, #632B8C, #F2719E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+        }
+
+        .slide-content p {
+            font-size: 1.8rem;
+            color: #1e293b;
+            max-width: 650px;
+            font-weight: 500;
+        }
+
+        .slide-badge {
+            background: #F2719E;
+            padding: 1.8rem 3rem;
+            border-radius: 6rem;
+            color: white;
+            font-weight: 700;
+            font-size: 2rem;
+            box-shadow: 0 25px 30px -12px #F2719E;
+        }
+
+        /* section titles bigger */
+        .section {
+            padding: 4rem 6%;
+        }
+
+        .section-title {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 2.8rem;
+            background: linear-gradient(145deg, #1F2B96, #F2719E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        /* ===== RIDE CARDS (MASSIVE, ANIMATED HOVER) ===== */
+        .ride-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .ride-card {
+            background: white;
+            border-radius: 3.5rem;
+            padding: 2.5rem;
+            box-shadow: 0 30px 40px -12px rgba(99, 43, 140, 0.15);
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+            border: 2px solid rgba(242, 113, 158, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ride-card:hover {
+            transform: scale(1.04) translateY(-12px);
+            box-shadow: 0 45px 60px -8px rgba(242, 113, 158, 0.4);
+            border-color: #F2719E;
+            background: #fffbfd;
+        }
+
+        .ride-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .rider-avatar-lg {
+            background: #e3deff;
+            width: 70px;
+            height: 70px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1F2B96;
+            border: 3px solid #F2719E;
+        }
+
+        .price-badge {
+            background: linear-gradient(145deg, #1F2B96, #F2719E);
+            color: white;
+            font-weight: 700;
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            font-size: 1.8rem;
+        }
+
+        .route {
+            font-weight: 800;
+            font-size: 2rem;
+            margin: 1rem 0 0.4rem;
+        }
+
+        .route small {
+            font-weight: 500;
+            font-size: 1.3rem;
+            color: #475569;
+        }
+
+        .time {
+            display: flex;
+            gap: 2rem;
+            color: #334155;
+            font-size: 1.3rem;
+            margin: 1rem 0;
+            font-weight: 500;
+        }
+
+        .rating {
+            font-size: 1.3rem;
+            margin: 0.5rem 0 1.2rem;
+        }
+
+        .book-btn {
+            background: transparent;
+            border: 3px solid #F2719E;
+            color: #F2719E;
+            font-weight: 700;
+            font-size: 1.4rem;
+            padding: 1rem 2rem;
+            border-radius: 5rem;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            transition: 0.2s;
+            width: fit-content;
+        }
+
+        .book-btn:hover {
+            background: #F2719E;
+            color: white;
+            box-shadow: 0 15px 20px -8px #F2719E;
+        }
+
+        /* filter bar bigger */
+        .filter-bar {
+            background: white;
+            padding: 2rem 3rem;
+            border-radius: 6rem;
+            margin-bottom: 3rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem 2rem;
+            align-items: center;
+            box-shadow: 0 25px 40px -15px rgba(31, 43, 150, 0.2);
+            border: 2px solid #fad5e6;
+        }
+
+        .filter-input {
+            border: none;
+            background: #f1f5ff;
+            padding: 1.2rem 2rem;
+            border-radius: 4rem;
+            font-size: 1.3rem;
+            min-width: 240px;
+            flex: 1 1 200px;
+            border: 1px solid #fff0f8;
+        }
+
+        .filter-btn {
+            background: linear-gradient(145deg, #1F2B96, #F2719E);
+            border: none;
+            color: white;
+            padding: 1.2rem 3rem;
+            border-radius: 4rem;
+            font-weight: 700;
+            font-size: 1.4rem;
+            cursor: pointer;
+            box-shadow: 0 10px 18px #F2719E55;
+        }
+
+        /* testimonials large */
+        .testimonials {
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .testi-card {
+            background: white;
+            border-radius: 3.5rem;
+            padding: 3rem;
+            flex: 1 1 300px;
+            border: 2px solid #ffe5f0;
+            transition: 0.25s;
+        }
+
+        .testi-card:hover {
+            background: #fdf4ff;
+            border-color: #F2719E;
+            transform: scale(1.02);
+        }
+
+        .testi-card i {
+            color: #F2719E;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .testi-card p {
+            font-size: 1.5rem;
+        }
+
+        /* live map BIG */
+        .map-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+            background: white;
+            border-radius: 4rem;
+            padding: 2.5rem;
+            box-shadow: 0 40px 50px -15px #1F2B9650;
+            border: 2px solid #ffffff70;
+        }
+
+        .campus-map {
+            flex: 3 1 550px;
+            height: 420px;
+            background: #b9c8ff;
+            border-radius: 3.5rem;
+            overflow: hidden;
+            border: 4px solid white;
+            box-shadow: inset 0 0 0 2px #F2719E;
+        }
+
+        .map-overlay {
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(2px);
+        }
+
+        .live-badge {
+            background: #F2719E;
+            color: white;
+            border-radius: 60px;
+            padding: 0.8rem 2rem;
+            font-size: 1.3rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin: 1rem;
+        }
+
+        .bike-marker {
+            background: white;
+            width: 16px;
+            height: 16px;
+            border-radius: 20px;
+            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.3);
+        }
+
+        .tracking-side {
+            flex: 1 1 280px;
+            background: #f2edff;
+            border-radius: 3rem;
+            padding: 2.2rem;
+            font-size: 1.3rem;
+        }
+
+        /* dashboard row bigger */
+        .dashboard-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2.8rem;
+        }
+
+        .profile-dash,
+        .history-panel {
+            flex: 1 1 350px;
+            background: white;
+            border-radius: 3.5rem;
+            padding: 2.8rem;
+            border: 2px solid #f5d6e8;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            font-size: 1.4rem;
+            border-bottom: 2px solid #f3e3ff;
+        }
+
+        .booking-notif {
+            background: #1F2B96;
+            color: white;
+            padding: 1.8rem 3.5rem;
+            border-radius: 6rem;
+            font-weight: 700;
+            font-size: 1.8rem;
+            display: inline-block;
+            margin: 2rem 0 1rem;
+            box-shadow: 0 20px 30px #1F2B9670;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                background: #1F2B96;
+            }
+
+            50% {
+                transform: scale(1.02);
+                background: #F2719E;
+            }
+        }
+
+        /* ===== NEW ATTRACTIVE RESPONSIVE FOOTER ===== */
+        .campus-footer {
+            background: linear-gradient(145deg, #0b1123, #1a1f3a, #2a1e3c);
+            color: #d3dcff;
+            padding: 5rem 6% 3rem;
+            border-radius: 5rem 5rem 0 0;
+            margin-top: 4rem;
+            box-shadow: 0 -30px 50px -10px rgba(242, 113, 158, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .campus-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, #1F2B96, #F2719E, #FFC857);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 3.5rem;
+            margin-bottom: 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-col {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .footer-col h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(145deg, #F2719E, #FFC857);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .footer-logo {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #F2719E, #9f7aea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .footer-col p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #b0bbeb;
+            max-width: 280px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.8rem;
+            margin-top: 0.8rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            color: #F2719E;
+            font-size: 1.8rem;
+            transition: all 0.25s ease;
+            border: 1px solid rgba(242, 113, 158, 0.3);
+        }
+
+        .social-links a:hover {
+            background: #F2719E;
+            color: #0b1123;
+            transform: translateY(-6px);
+            box-shadow: 0 12px 20px -8px #F2719E;
+            border-color: transparent;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .footer-col ul li a {
+            color: #b5c2ff;
+            text-decoration: none;
+            font-size: 1.3rem;
+            font-weight: 500;
+            transition: 0.2s;
+            display: inline-block;
+            position: relative;
+        }
+
+        .footer-col ul li a:hover {
+            color: #F2719E;
+            transform: translateX(6px);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            font-size: 1.2rem;
+            color: #bdc7ff;
+        }
+
+        .contact-item i {
+            width: 28px;
+            color: #F2719E;
+            font-size: 1.8rem;
+        }
+
+        .emergency-badge {
+            background: rgba(242, 113, 158, 0.15);
+            padding: 1.2rem 1.8rem;
+            border-radius: 5rem;
+            border: 1px dashed #F2719E;
+            display: inline-flex;
+            align-items: center;
+            gap: 1.2rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            color: #ffe2f0;
+        }
+
+        .emergency-badge i {
+            color: #F2719E;
+            font-size: 2rem;
+        }
+
+        .footer-bottom {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2.5rem;
+            border-top: 2px solid rgba(242, 113, 158, 0.15);
+            font-size: 1.2rem;
+            color: #8f9cd3;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .footer-bottom-links a {
+            color: #bdc7ff;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .footer-bottom-links a:hover {
+            color: #F2719E;
+        }
+
+        .footer-bottom .copyright i {
+            color: #F2719E;
+            margin: 0 4px;
+        }
+
+        /* responsive footer */
+        @media (max-width: 700px) {
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 2.5rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1.2rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* main content spacer */
+        .main-content {
+            flex: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- main content (existing site sections - kept same) -->
+    <div class="main-content">
+        <nav class="navbar">
+            <div class="logo"><i class="fas fa-motorcycle" style="color: #F2719E;"></i> CampusWheel</div>
+            <div class="nav-links">
+                <a href="#">Rides</a>
+                <a href="#">Live map</a>
+                <a href="#">Dashboard</a>
+                <a href="#">Safety</a>
+            </div>
+            <div class="nav-right">
+                <i class="fas fa-bell" style="color:#1F2B96; font-size: 2rem;"></i>
+                <div class="avatar-large">P</div>
+                <div class="mobile-menu"><i class="fas fa-bars"></i></div>
+            </div>
+        </nav>
+
+        <!-- HERO SLIDER -->
+        <div class="hero-slider">
+            <div class="slide-card">
+                <div class="slide-content">
+                    <h2>Share · ride · save</h2>
+                    <p>Saharanpur → Shobhit University Gangoh for just ₹25</p>
+                </div>
+                <div class="slide-badge"><i class="fas fa-bolt"></i> 12 rides now</div>
+            </div>
+            <div class="slide-card">
+                <div class="slide-content">
+                    <h2>100% student verified</h2>
+                    <p>Emergency support · Live tracking · Campus only</p>
+                </div>
+                <div class="slide-badge"><i class="fas fa-shield-halved"></i> safe</div>
+            </div>
+            <div class="slide-card">
+                <div class="slide-content">
+                    <h2>Live bike tracking</h2>
+                    <p>See your rider approach in real time</p>
+                </div>
+                <div class="slide-badge"><i class="fas fa-location-dot"></i> GPS</div>
+            </div>
+        </div>
+
+        <!-- SEARCH FILTER -->
+        <div class="section">
+            <div class="filter-bar">
+                <i class="fas fa-magnifying-glass" style="color:#F2719E; font-size: 2rem;"></i>
+                <input class="filter-input" type="text" placeholder="From, e.g. Saharanpur">
+                <input class="filter-input" type="text" placeholder="To, e.g. University Gangoh">
+                <input class="filter-input" type="text" placeholder="Today's date">
+                <button class="filter-btn"><i class="fas fa-sliders"></i> find ride</button>
+            </div>
+        </div>
+
+        <!-- RIDE CARDS -->
+        <div class="section">
+            <div class="section-title"><i class="fas fa-bicycle"></i> available rides · big & bold</div>
+            <div class="ride-grid">
+                <div class="ride-card">
+                    <div class="ride-header">
+                        <span class="rider-avatar-lg"><i class="fas fa-user-graduate"></i></span>
+                        <span class="price-badge">₹25</span>
+                    </div>
+                    <div class="route">Saharanpur <i class="fas fa-arrow-right-long"></i> University <small>
+                            Gangoh</small></div>
+                    <div class="time"><i class="far fa-clock"></i> 8:30 AM · 3 seats left</div>
+                    <div class="rating"><i class="fas fa-star" style="color: gold;"></i> 4.98 (Anjali, ME)</div>
+                    <button class="book-btn"><i class="fas fa-hand-holding-heart"></i> request ride</button>
+                </div>
+                <div class="ride-card">
+                    <div class="ride-header">
+                        <span class="rider-avatar-lg"><i class="fas fa-user-astronaut"></i></span>
+                        <span class="price-badge">₹30</span>
+                    </div>
+                    <div class="route">Delhi Rd <i class="fas fa-arrow-right-long"></i> Central Library</div>
+                    <div class="time"><i class="far fa-clock"></i> 9:15 AM · 2 seats</div>
+                    <div class="rating"><i class="fas fa-star" style="color: gold;"></i> 4.92 (Ravi, CSE)</div>
+                    <button class="book-btn">request ride</button>
+                </div>
+                <div class="ride-card">
+                    <div class="ride-header">
+                        <span class="rider-avatar-lg"><i class="fas fa-user-nurse"></i></span>
+                        <span class="price-badge">₹20</span>
+                    </div>
+                    <div class="route">Saharanpur <i class="fas fa-arrow-right-long"></i> Gate No.3</div>
+                    <div class="time"><i class="far fa-clock"></i> 10:00 AM · 1 seat</div>
+                    <div class="rating"><i class="fas fa-star" style="color: gold;"></i> 4.88 (Priya, Biotech)</div>
+                    <button class="book-btn">request ride</button>
+                </div>
+                <div class="ride-card">
+                    <div class="ride-header">
+                        <span class="rider-avatar-lg"><i class="fas fa-user-tie"></i></span>
+                        <span class="price-badge">₹35</span>
+                    </div>
+                    <div class="route">New Mandi <i class="fas fa-arrow-right-long"></i> Admin Block</div>
+                    <div class="time"><i class="far fa-clock"></i> 11:45 AM · 2 seats</div>
+                    <div class="rating"><i class="fas fa-star" style="color: gold;"></i> 4.95 (Arjun, MBA)</div>
+                    <button class="book-btn">request ride</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TESTIMONIALS -->
+        <div class="section" style="background: #ebf0ff; border-radius: 5rem;">
+            <div class="section-title"><i class="fas fa-comment-dots"></i> what students say</div>
+            <div class="testimonials">
+                <div class="testi-card">
+                    <i class="fas fa-quote-right"></i>
+                    <p>“I ride my scooty daily & earn ₹3k/month. All riders are from my uni — super safe.”</p>
+                    <h3 style="font-size: 1.8rem; margin-top:1.5rem;">— Divya, 3rd year</h3>
+                </div>
+                <div class="testi-card">
+                    <i class="fas fa-quote-right"></i>
+                    <p>“Reached Gangoh in 18 mins for just ₹25. Live tracking made it stress‑free.”</p>
+                    <h3 style="font-size: 1.8rem; margin-top:1.5rem;">— Karan, 1st year</h3>
+                </div>
+                <div class="testi-card">
+                    <i class="fas fa-quote-right"></i>
+                    <p>“Emergency button connects to campus security. That’s real peace of mind.”</p>
+                    <h3 style="font-size: 1.8rem; margin-top:1.5rem;">— Simran, PhD</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAP + LIVE TRACKING -->
+        <div class="section">
+            <div class="section-title"><i class="fas fa-map-location-dot"></i> live tracker · google campus</div>
+            <div class="map-container">
+                <div class="campus-map">
+                    <div class="map-overlay">
+                        <div class="live-badge"><span class="bike-marker"></span> 5 bikes moving now</div>
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d110942.21030089123!2d77.50985950410857!3d29.967865428682357!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390eea6a1b1f9a69%3A0xa73b5d1d0b4bc6c6!2sShobhit%20University%2C%20Gangoh!5e0!3m2!1sen!2sin!4v1712324567890!5m2!1sen!2sin"
+                            width="100%" height="100%" style="border:0; border-radius: 3rem;" allowfullscreen=""
+                            loading="lazy"></iframe>
+                    </div>
+                </div>
+                <div class="tracking-side">
+                    <h2 style="font-size: 2.2rem;"><i class="fas fa-motorcycle"></i> live nearby</h2>
+                    <p><i class="fas fa-circle" style="color:#F2719E;"></i> <strong>Nikhil</strong> · 0.3 km (towards
+                        Uni)</p>
+                    <p><i class="fas fa-circle" style="color:#1F2B96;"></i> <strong>Meera</strong> · 0.8 km (Saharanpur)
+                    </p>
+                    <p><i class="fas fa-circle" style="color:#FFB347;"></i> <strong>Yash</strong> · 1.2 km (Gangoh)</p>
+                    <hr style="margin:2rem 0; opacity:0.3;">
+                    <p><i class="fas fa-location-dot" style="color:#F2719E;"></i> <strong>Your location:</strong>
+                        Saharanpur bus stand</p>
+                    <button class="book-btn" style="font-size:1.3rem; padding:0.8rem 2rem;">re-center</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOOKING NOTIFICATION -->
+        <div class="section" style="padding-top: 0;">
+            <div class="booking-notif">
+                <i class="fas fa-bell"></i> New request: Anjali (Saharanpur → Uni) · <u>accept now</u>
+            </div>
+        </div>
+
+        <!-- PROFILE + HISTORY -->
+        <div class="section">
+            <div class="dashboard-row">
+                <div class="profile-dash">
+                    <div style="display: flex; gap: 2rem; align-items: center; margin-bottom: 2rem;">
+                        <div class="avatar-large" style="width:90px; height:90px; font-size:3rem;">P</div>
+                        <div>
+                            <h2 style="font-size:2.5rem;">Pranav Sharma</h2>
+                            <p style="font-size:1.4rem;">CSE 3rd yr · verified <i class="fas fa-check-circle"
+                                    style="color:#00b8a9;"></i></p>
+                        </div>
+                    </div>
+                    <div class="stat-item"><span>rides offered</span> <strong>24</strong></div>
+                    <div class="stat-item"><span>rides taken</span> <strong>11</strong></div>
+                    <div class="stat-item"><span>rating</span> <strong>4.97 ★</strong></div>
+                    <div class="stat-item"><span>emergency contact</span> <strong>+1 ********89</strong></div>
+                    <button
+                        style="background:none; border:3px solid #F2719E; border-radius:4rem; padding:1rem 2.5rem; font-size:1.4rem; margin-top:2rem;">edit
+                        profile</button>
+                </div>
+                <div class="history-panel">
+                    <h2 style="font-size:2.5rem; margin-bottom:1.5rem;"><i class="fas fa-clock-rotate-left"></i> recent
+                        trips</h2>
+                    <div class="stat-item"><span>21 Mar</span> Saharanpur → Library <span>₹25</span></div>
+                    <div class="stat-item"><span>19 Mar</span> Gangoh → Delhi Rd <span>₹30</span></div>
+                    <div class="stat-item"><span>18 Mar</span> University → Saharanpur <span>₹20</span></div>
+                    <div class="stat-item"><span>16 Mar</span> New Mandi → Gate 3 <span>₹25</span></div>
+                    <div class="stat-item"><span>15 Mar</span> Saharanpur → Admin <span>₹25</span></div>
+                    <button
+                        style="background:transparent; border:none; color:#F2719E; font-size:1.5rem; margin-top:1.5rem;">view
+                        all <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== NEW ATTRACTIVE RESPONSIVE FOOTER ===== -->
+    <footer class="campus-footer">
+        <div class="footer-grid">
+            <!-- col 1: brand & about -->
+            <div class="footer-col">
+                <div class="footer-logo"><i class="fas fa-motorcycle"></i> CampusWheel</div>
+                <p>Smart two-wheeler ride-sharing for university students. Safe, affordable, and verified.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-x-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <!-- col 2: quick links -->
+            <div class="footer-col">
+                <h3>Explore</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-chevron-right" style="font-size: 1rem; margin-right: 8px;"></i>
+                            Available rides</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right" style="font-size: 1rem; margin-right: 8px;"></i>
+                            Live map</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right" style="font-size: 1rem; margin-right: 8px;"></i>
+                            Offer a ride</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right" style="font-size: 1rem; margin-right: 8px;"></i>
+                            Safety tips</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right" style="font-size: 1rem; margin-right: 8px;"></i>
+                            FAQs</a></li>
+                </ul>
+            </div>
+            <!-- col 3: support & legal -->
+            <div class="footer-col">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="#">Help center</a></li>
+                    <li><a href="#">Student verification</a></li>
+                    <li><a href="#">Community guidelines</a></li>
+                    <li><a href="#">Privacy policy</a></li>
+                    <li><a href="#">Terms of use</a></li>
+                </ul>
+            </div>
+            <!-- col 4: contact & emergency -->
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i> <span>support@campuswheel.in</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone-alt"></i> <span>+91 98765 43210</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-pin"></i> <span>Shobhit University, Gangoh</span>
+                </div>
+                <div class="emergency-badge">
+                    <i class="fas fa-shield-heart"></i> <span>24/7 emergency<br> +91 112 233 4455</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- bottom bar -->
+        <div class="footer-bottom">
+            <div class="copyright">
+                <i class="far fa-copyright"></i> 2026 CampusWheel · built for students
+            </div>
+            <div class="footer-bottom-links">
+                <a href="#">Accessibility</a>
+                <a href="#">Cookies</a>
+                <a href="#">Complaints</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function () {
+            const notif = document.querySelector('.booking-notif');
+            notif?.addEventListener('click', () => {
+                alert('✅ Ride request accepted! You can now chat with Anjali.');
+                notif.style.background = '#00b8a9';
+                notif.innerHTML = '<i class="fas fa-check-circle"></i> Accepted — Anjali will pick you up at 8:25 AM';
+            });
+
+            document.querySelectorAll('.book-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert('📲 ride request sent (demo)');
+                });
+            });
+        })();
+    </script>
+
+</body>
+
+</html>

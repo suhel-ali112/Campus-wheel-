@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> safety & trust features</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Outfit + Plus Jakarta Sans for bold look -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f0f5ff, #fbeaff);
+            color: #0f1a2f;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.5;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* main safety card - big, attractive, gradient */
+        .safety-hub {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border-radius: 5rem;
+            padding: 3.5rem 4rem;
+            box-shadow: 0 60px 80px -30px rgba(31, 43, 150, 0.5);
+            border: 2px solid rgba(242, 113, 158, 0.3);
+            transition: all 0.2s;
+        }
+
+        /* header with shield */
+        .safety-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 3.5rem;
+            flex-wrap: wrap;
+            border-bottom: 4px dashed #fad5e6;
+            padding-bottom: 2rem;
+        }
+
+        .safety-icon-big {
+            background: linear-gradient(145deg, #1F2B96, #F2719E);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            box-shadow: 0 20px 30px #F2719E80;
+            border: 5px solid white;
+        }
+
+        .safety-header h2 {
+            font-size: 4rem;
+            background: linear-gradient(145deg, #1F2B96, #F2719E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .safety-header p {
+            font-size: 1.8rem;
+            color: #2d3a5e;
+            max-width: 600px;
+        }
+
+        /* feature grid */
+        .safety-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin: 3.5rem 0;
+        }
+
+        .safety-card {
+            background: white;
+            border-radius: 3rem;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 20px 30px -8px rgba(99,43,140,0.15);
+            transition: all 0.3s ease;
+            border: 2px solid rgba(242,113,158,0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .safety-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #F2719E;
+            box-shadow: 0 35px 40px -12px #F2719E60;
+            background: #fffbfe;
+        }
+
+        .card-icon {
+            background: #ede5ff;
+            width: 70px;
+            height: 70px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            color: #1F2B96;
+            border: 3px solid #F2719E;
+            margin-bottom: 0.5rem;
+        }
+
+        .safety-card h3 {
+            font-size: 2rem;
+            background: linear-gradient(145deg, #1F2B96, #F2719E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .safety-card p {
+            font-size: 1.3rem;
+            color: #36454F;
+            line-height: 1.6;
+        }
+
+        .feature-tag {
+            background: #f2edff;
+            align-self: flex-start;
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #1F2B96;
+            margin-top: 0.8rem;
+            border: 1px solid #F2719E;
+        }
+
+        /* emergency bar (prominent) */
+        .emergency-bar {
+            background: linear-gradient(145deg, #1F2B96, #632B8C);
+            border-radius: 4rem;
+            padding: 2rem 3rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            margin: 3rem 0 2rem;
+            box-shadow: 0 20px 40px #1F2B9670;
+            border: 3px solid #F2719E;
+        }
+
+        .emergency-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            color: white;
+        }
+
+        .emergency-left i {
+            font-size: 4rem;
+            color: #F2719E;
+            filter: drop-shadow(0 0 8px #ffb6d9);
+        }
+
+        .emergency-left h3 {
+            font-size: 2.4rem;
+            color: white;
+            text-shadow: 0 2px 5px black;
+        }
+
+        .emergency-left p {
+            font-size: 1.5rem;
+            opacity: 0.95;
+        }
+
+        .emergency-button {
+            background: #F2719E;
+            border: none;
+            color: white;
+            font-weight: 800;
+            font-size: 2.2rem;
+            padding: 1.5rem 4rem;
+            border-radius: 5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 25px white;
+            transition: 0.2s;
+            border: 3px solid white;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .emergency-button:hover {
+            transform: scale(1.05);
+            background: #ff8ab0;
+            box-shadow: 0 15px 35px white;
+        }
+
+        /* verification badge row */
+        .verification-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            background: #e1e9ff;
+            border-radius: 4rem;
+            padding: 2rem 2.5rem;
+            margin: 2.5rem 0;
+            align-items: center;
+            border: 3px solid white;
+        }
+
+        .verif-item {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            background: white;
+            padding: 1rem 2.5rem;
+            border-radius: 4rem;
+            box-shadow: 0 8px 12px #1F2B9620;
+        }
+
+        .verif-item i {
+            color: #F2719E;
+            font-size: 2rem;
+        }
+
+        /* safety stats */
+        .safety-stats {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 2rem;
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .stat-circle {
+            background: white;
+            border-radius: 4rem;
+            padding: 1.8rem 2.5rem;
+            min-width: 160px;
+            border: 3px solid #F2719E;
+        }
+
+        .stat-circle .number {
+            font-size: 3.2rem;
+            font-weight: 800;
+            background: linear-gradient(145deg, #1F2B96, #F2719E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-circle .label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d374b;
+        }
+
+        /* responsive */
+        @media (max-width: 700px) {
+            .safety-hub {
+                padding: 2rem 1.8rem;
+            }
+            .safety-header h2 {
+                font-size: 2.8rem;
+            }
+            .emergency-bar {
+                flex-direction: column;
+                gap: 2rem;
+                align-items: flex-start;
+            }
+            .emergency-button {
+                width: 100%;
+                justify-content: center;
+            }
+            .verification-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- SAFETY FEATURES HUB - main div -->
+<div class="safety-hub">
+    
+    <!-- header with shield -->
+    <div class="safety-header">
+        <div class="safety-icon-big">
+            <i class="fas fa-shield-halved"></i>
+        </div>
+        <div>
+            <h2>safety & trust</h2>
+            <p>campus‑first protection · verified community · 24/7 emergency</p>
+        </div>
+    </div>
+
+    <!-- stats summary (quick trust indicators) -->
+    <div class="safety-stats">
+        <div class="stat-circle">
+            <div class="number">100%</div>
+            <div class="label">student ID verified</div>
+        </div>
+        <div class="stat-circle">
+            <div class="number">24/7</div>
+            <div class="label">emergency support</div>
+        </div>
+        <div class="stat-circle">
+            <div class="number">4.98</div>
+            <div class="label">avg. safety rating</div>
+        </div>
+    </div>
+
+    <!-- MAIN SAFETY FEATURE GRID (6 core features) -->
+    <div class="safety-grid">
+        
+        <!-- 1. live location sharing -->
+        <div class="safety-card">
+            <div class="card-icon"><i class="fas fa-location-dot"></i></div>
+            <h3>live location tracking</h3>
+            <p>Share your ride in real time with trusted contacts. Friends can see your ETA and route.</p>
+            <span class="feature-tag"><i class="fas fa-check-circle"></i> always on</span>
+        </div>
+
+        <!-- 2. emergency button + sos -->
+        <div class="safety-card">
+            <div class="card-icon"><i class="fas fa-circle-exclamation"></i></div>
+            <h3>SOS emergency</h3>
+            <p>One‑tap alert to campus security and your emergency contacts. Discreet and instant.</p>
+            <span class="feature-tag"><i class="fas fa-bell"></i> 24/7 response</span>
+        </div>
+
+        <!-- 3. rider verification (ID card) -->
+        <div class="safety-card">
+            <div class="card-icon"><i class="fas fa-id-card"></i></div>
+            <h3>university ID verified</h3>
+            <p>Every rider and passenger must verify with a valid university ID. No outsiders.</p>
+            <span class="feature-tag"><i class="fas fa-check-double"></i> mandatory</span>
+        </div>
+
+        <!-- 4. female rider preference / women safety -->
+        <div class="safety-card">
+            <div class="card-icon"><i class="fas fa-venus"></i></div>
+            <h3>women-only rides</h3>
+            <p>Option to match only with female riders/passengers for extra comfort.</p>
+            <span class="feature-tag"><i class="fas fa-heart"></i> safe space</span>
+        </div>
+
+        <!-- 5. ride reporting & block -->
+        <div class="safety-card">
+            <div class="card-icon"><i class="fas fa-flag"></i></div>
+            <h3>report & block</h3>
+            <p>Unsafe behaviour? Report instantly. Users with low ratings are removed.</p>
+            <span class="feature-tag"><i class="fas fa-shield"></i> trust team</span>
+        </div>
+
+        <!-- 6. helmet reminder / ride safety -->
+        <div class="safety-card">
+            <div class="card-icon"><i class="fas fa-helmet-safety"></i></div>
+            <h3>helmet & gear prompt</h3>
+            <p>Both rider and passenger get safety reminders before trip starts.</p>
+            <span class="feature-tag"><i class="fas fa-motorcycle"></i> ride smart</span>
+        </div>
+    </div>
+
+    <!-- verification badges row (extra trust) -->
+    <div class="verification-row">
+        <div class="verif-item"><i class="fas fa-id-badge"></i> institute email required</div>
+        <div class="verif-item"><i class="fas fa-calendar-check"></i> yearly re‑verification</div>
+        <div class="verif-item"><i class="fas fa-star"></i> rating >4.5 to ride</div>
+        <div class="verif-item"><i class="fas fa-phone"></i> emergency contact on file</div>
+    </div>
+
+    <!-- EMERGENCY BAR (very prominent) -->
+    <div class="emergency-bar">
+        <div class="emergency-left">
+            <i class="fas fa-shield-heart"></i>
+            <div>
+                <h3>campus emergency support</h3>
+                <p>direct line to security · available 24/7</p>
+            </div>
+        </div>
+        <button class="emergency-button" id="sosButton">
+            <i class="fas fa-triangle-exclamation"></i> SOS
+        </button>
+    </div>
+
+    <!-- additional safety features: two column description -->
+    <div style="display: flex; flex-wrap: wrap; gap: 2.5rem; margin-top: 2rem;">
+        <div style="flex: 1; min-width: 200px; background: #fbf4ff; border-radius: 2.5rem; padding: 2rem;">
+            <h4 style="font-size:1.8rem; margin-bottom:1rem;"><i class="fas fa-clock" style="color:#F2719E;"></i> ride timeline</h4>
+            <p style="font-size:1.3rem;">Each ride has a start/end log. If you don't mark 'arrived safely', your emergency contact gets a notification.</p>
+        </div>
+        <div style="flex: 1; min-width: 200px; background: #fbf4ff; border-radius: 2.5rem; padding: 2rem;">
+            <h4 style="font-size:1.8rem; margin-bottom:1rem;"><i class="fas fa-phone-alt" style="color:#F2719E;"></i> in-app calling</h4>
+            <p style="font-size:1.3rem;">Call riders without exposing your real number. Fully anonymised and recorded for safety.</p>
+        </div>
+    </div>
+
+    <!-- footnote with demo simulation (sos click) -->
+    <p style="margin-top: 3rem; font-size: 1.3rem; color: #4e6188; text-align: center; border-top: 2px dashed #fad5e6; padding-top: 2rem;">
+        <i class="fas fa-circle-info"></i> tap SOS to see a demo alert. all safety features are active on every ride.
+    </p>
+</div>
+
+<!-- interactive script for SOS demo -->
+<script>
+    (function() {
+        const sosBtn = document.getElementById('sosButton');
+        if (sosBtn) {
+            sosBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // simulate emergency alert
+                const modal = document.createElement('div');
+                modal.style.position = 'fixed';
+                modal.style.top = '20px';
+                modal.style.right = '20px';
+                modal.style.background = '#1F2B96';
+                modal.style.color = 'white';
+                modal.style.padding = '2rem 3rem';
+                modal.style.borderRadius = '4rem';
+                modal.style.fontSize = '2rem';
+                modal.style.fontWeight = 'bold';
+                modal.style.boxShadow = '0 0 0 4px #F2719E, 0 20px 40px black';
+                modal.style.zIndex = '9999';
+                modal.style.border = '4px solid white';
+                modal.innerHTML = '<i class="fas fa-bell"></i> EMERGENCY ALERT: campus security notified · help is on the way!';
+                document.body.appendChild(modal);
+                setTimeout(() => { modal.remove(); }, 4000);
+                
+                // also change button text briefly
+                const originalText = sosBtn.innerHTML;
+                sosBtn.innerHTML = '<i class="fas fa-check"></i> alert sent';
+                sosBtn.style.background = '#00b8a9';
+                setTimeout(() => {
+                    sosBtn.innerHTML = originalText;
+                    sosBtn.style.background = '#F2719E';
+                }, 3000);
+            });
+        }
+
+        // make all feature cards a bit interactive
+        document.querySelectorAll('.safety-card').forEach(card => {
+            card.addEventListener('click', () => {
+                // just a tiny demo: show feature name
+                const title = card.querySelector('h3')?.innerText || 'feature';
+                alert(`✨ ${title}: active & protecting you.`);
+            });
+        });
+    })();
+</script>
+
+</body>
+</html>

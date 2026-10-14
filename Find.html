@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusWheel · ride share for two-wheelers</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Inter + Space Grotesk for fun gradient mood -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Space+Grotesk:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #f6f9ff;
+            color: #172b4d;
+            scroll-behavior: smooth;
+            line-height: 1.5;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+
+        .slid-b:hover {
+            transform: scale(1.02) translateY(-8px);
+            box-shadow: 0 25px 40px -5px rgba(200, 80, 192, 0.25);
+            border-color: #C850C0;
+            border-radius: 40%;
+            background: none;
+        }
+
+        /* colourful gradient UI — used in many places */
+        .gradient-bg {
+            background: linear-gradient(145deg, #4158D0, #C850C0, #FFCC70);
+            background-size: 200% 200%;
+            animation: gradientFlow 12s ease infinite;
+        }
+
+        @keyframes gradientFlow {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* responsive navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #1e2b8b, #b13e8f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.2rem;
+            font-weight: 500;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #1a2b4c;
+            font-size: 1rem;
+            transition: 0.2s;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 4px;
+        }
+
+        .nav-links a:hover {
+            border-bottom-color: #C850C0;
+            color: #1f1f4b;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .avatar {
+            background: linear-gradient(145deg, #4158D0, #C850C0);
+            width: 42px;
+            height: 42px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.3rem;
+            box-shadow: 0 6px 12px rgba(193, 76, 179, 0.3);
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.8rem;
+            color: #4158D0;
+        }
+
+        /* responsive */
+        @media (max-width: 800px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+        }
+
+        /* slider (hero) */
+        .hero-slider {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 1rem;
+            padding: 2rem 5%;
+            background: #ecf2ff;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .hero-slider::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .hero-slider::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, #4158D0, #C850C0);
+            border-radius: 20px;
+        }
+
+        .slide-card {
+            scroll-snap-align: start;
+            min-width: 85%;
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem 3rem;
+            box-shadow: 0 25px 40px -15px rgba(65, 88, 208, 0.25);
+            background: linear-gradient(135deg, #fdf1ff, #ffffff);
+            border: 1px solid rgba(200, 80, 192, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .slide-content h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(145deg, #1e2b8b, #b13e8f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide-content p {
+            font-size: 1.2rem;
+            color: #2e405b;
+            max-width: 500px;
+        }
+
+        .slide-badge {
+            background: #C850C0;
+            padding: 1rem 2rem;
+            border-radius: 5rem;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+            box-shadow: 0 10px 15px -8px #C850C0;
+        }
+
+        /* section style */
+        .section {
+            padding: 3rem 5%;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(145deg, #4158D0, #C850C0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ride cards + animated hover */
+        .ride-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 1.8rem;
+        }
+
+        .ride-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 1.5rem;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.03);
+            transition: all 0.25s ease;
+            border: 1px solid #f0e5ff;
+            position: relative;
+            backdrop-filter: blur(4px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ride-card:hover {
+            transform: scale(1.02) translateY(-8px);
+            box-shadow: 0 25px 40px -5px rgba(200, 80, 192, 0.25);
+            border-color: #C850C0;
+            background: #fefbff;
+        }
+
+        .ride-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .rider-avatar {
+            background: #e2d5ff;
+            border-radius: 40px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #4158D0;
+        }
+
+        .price-badge {
+            background: linear-gradient(145deg, #4158D0, #C850C0);
+            color: white;
+            font-weight: 600;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+        }
+
+        .route {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin: 0.5rem 0 0.2rem;
+        }
+
+        .route small {
+            font-weight: 400;
+            color: #666;
+        }
+
+        .time {
+            display: flex;
+            gap: 1rem;
+            color: #5a6d86;
+            font-size: 0.9rem;
+            margin: 0.6rem 0;
+        }
+
+        .book-btn {
+            background: transparent;
+            border: 2px solid #C850C0;
+            width: 80%;
+            color: #C850C0;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 3rem;
+            margin-top: 1rem;
+            cursor: pointer;
+           
+         
+        }
+
+        .book-btn:hover {
+            background: #C850C0;
+            color: white;
+        }
+
+        /* search filter */
+        .filter-bar {
+            background: white;
+            padding: 1.2rem 2rem;
+            border-radius: 4rem;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem 1.5rem;
+            align-items: center;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.02);
+            border: 1px solid #ffe4f5;
+        }
+
+        .filter-input {
+            border: none;
+            background: #f2f6ff;
+            padding: 0.7rem 1.2rem;
+            border-radius: 3rem;
+            font-size: 0.95rem;
+            min-width: 200px;
+            flex: 1 1 150px;
+        }
+
+        .filter-btn {
+            background: linear-gradient(145deg, #4158D0, #C850C0);
+            border: none;
+            color: white;
+            padding: 0.7rem 2rem;
+            border-radius: 3rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+
+        /* testimonials */
+        .testimonials {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .testi-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem;
+            flex: 1 1 250px;
+            border: 1px solid #f0dcff;
+            transition: 0.2s;
+        }
+
+        .testi-card:hover {
+            background: #faf3ff;
+            border-color: #C850C0;
+        }
+
+        .testi-card i {
+            color: #C850C0;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* map + live tracking */
+        .map-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            background: white;
+            border-radius: 2.5rem;
+            padding: 1.8rem;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.02);
+            border: 1px solid #ece2ff;
+        }
+
+        .campus-map {
+            flex: 2 1 350px;
+            height: 300px;
+            background: #d1dcff;
+            border-radius: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-overlay {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(3px);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #1a1f3b;
+            flex-direction: column;
+        }
+
+        .live-badge {
+            background: #ff5e7c;
+            color: white;
+            border-radius: 40px;
+            padding: 0.3rem 1.3rem;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .bike-marker {
+            background: #C850C0;
+            width: 12px;
+            height: 12px;
+            border-radius: 20px;
+            box-shadow: 0 0 0 5px rgba(200, 80, 192, 0.25);
+        }
+
+        .tracking-side {
+            flex: 1 1 220px;
+            background: #f2edff;
+            border-radius: 1.8rem;
+            padding: 1.5rem;
+        }
+
+        /* dashboard row (profile + history) */
+        .dashboard-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .profile-dash,
+        .history-panel {
+            flex: 1 1 280px;
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.02);
+            border: 1px solid #f0d9ff;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #eee2ff;
+        }
+
+        .notif-badge {
+            background: #00b8a9;
+            color: white;
+            border-radius: 40px;
+            padding: 0.2rem 1rem;
+            font-size: 0.8rem;
+            margin-left: 1rem;
+        }
+
+        /* footer */
+        /* ===== NEW ATTRACTIVE RESPONSIVE FOOTER ===== */
+        .campus-footer {
+            background: linear-gradient(145deg, #0b1123, #1a1f3a, #2a1e3c);
+            color: #d3dcff;
+            padding: 5rem 6% 3rem;
+            border-radius: 5rem 5rem 0 0;
+            margin-top: 4rem;
+            box-shadow: 0 -30px 50px -10px rgba(242, 113, 158, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .campus-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, #1F2B96, #F2719E, #FFC857);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 3.5rem;
+            margin-bottom: 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-col {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .footer-col h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(145deg, #F2719E, #FFC857);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #F2719E, #9f7aea);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .footer-col p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #b0bbeb;
+            max-width: 280px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.8rem;
+            margin-top: 0.8rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            color: #F2719E;
+            font-size: 1rem;
+            transition: all 0.25s ease;
+            border: 1px solid rgba(242, 113, 158, 0.3);
+        }
+
+        .social-links a:hover {
+            background: #F2719E;
+            color: #0b1123;
+            transform: translateY(-6px);
+            box-shadow: 0 12px 20px -8px #F2719E;
+            border-color: transparent;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .footer-col ul li a {
+            color: #b5c2ff;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: 0.2s;
+            display: inline-block;
+            position: relative;
+        }
+
+        .footer-col ul li a:hover {
+            color: #F2719E;
+            transform: translateX(6px);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            font-size: 1.2rem;
+            color: #bdc7ff;
+        }
+
+        .contact-item i {
+            width: 28px;
+            color: #F2719E;
+            font-size: 1.8rem;
+        }
+
+        .emergency-badge {
+            background: rgba(242, 113, 158, 0.15);
+            padding: 1.2rem 1.8rem;
+            border-radius: 5rem;
+            border: 1px dashed #F2719E;
+            display: inline-flex;
+            align-items: center;
+            gap: 1.2rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            color: #ffe2f0;
+        }
+
+        .emergency-badge i {
+            color: #F2719E;
+            font-size: 2rem;
+        }
+
+        .footer-bottom {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2.5rem;
+            border-top: 2px solid rgba(242, 113, 158, 0.15);
+            font-size: 1.2rem;
+            color: #8f9cd3;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .footer-bottom-links a {
+            color: #bdc7ff;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .footer-bottom-links a:hover {
+            color: #F2719E;
+        }
+
+        .footer-bottom .copyright i {
+            color: #F2719E;
+            margin: 0 4px;
+        }
+
+        /* responsive footer */
+        @media (max-width: 700px) {
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 2.5rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1.2rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* main content spacer */
+        .main-content {
+            flex: 1;
+        }
+
+        /* small */
+        @media (max-width:600px) {
+            .slide-card {
+                flex-direction: column;
+                align-items: start;
+                gap: 1rem;
+            }
+        }
+
+        /* fake map & booking notification simulation */
+        .booking-notif {
+            background: #4158D0;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 4rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 1rem;
+            animation: gentlePop 1s infinite alternate;
+        }
+
+        @keyframes gentlePop {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.02);
+                background: #C850C0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- responsive navigation (✔) -->
+    <nav class="navbar">
+        <div class="logo"><i class="fas fa-motorcycle" style="color: #C850C0;"></i> CampusWheel</div>
+        <div class="nav-links">
+            <a href="Find.html">Dashboard</a>
+            <a href="#ride-section">Find ride</a>
+             <a href="#map-section">Map</a>
+            <a href="safety.html">Safety</a>
+            <a href="login.html"> login / Signup</a>
+
+
+        </div>
+        <div class="nav-right">
+            <a href="notification.html"><i class="fas fa-bell" style="color: #4158D0; font-size: 1.3rem;"></i></a>
+            <a href="Profile.html">
+                <div class="avatar">P</div>
+            </a>
+            <div class="mobile-menu"><i class="fas fa-bars"></i></div>
+        </div>
+    </nav>
+
+    <!-- slider homepage (✔) -->
+    <div class="hero-slider">
+        <div class="slide-card">
+            <div class="slide-content">
+                <h2>Share ride · save money</h2>
+                <p>From Saharanpur to Shobhit University Gangoh — just ₹25</p>
+            </div>
+            <a href="#" class="slid-b">
+                <div class="slide-badge"><i class="fas fa-bolt"></i> 8 rides now</div>
+            </a>
+        </div>
+        <div class="slide-card">
+            <div class="slide-content">
+                <h2>Safe & verified students</h2>
+                <p>University ID mandatory · emergency support 24/7</p>
+            </div>
+            <a href="#" class="slid-b">
+                <div class="slide-badge"><i class="fas fa-shield-alt"></i> campus only</div>
+            </a>
+        </div>
+        <div class="slide-card">
+            <div class="slide-content">
+                <h2>Live bike tracking</h2>
+                <p>Know exactly where your rider is — real time</p>
+            </div>
+            <a href="#" class="slid-b">
+                <div class="slide-badge"><i class="fas fa-map-pin"></i> GPS</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- ride search filter (✔) -->
+    <div class="section">
+        <div class="filter-bar">
+            <i class="fas fa-search" style="color: #C850C0;"></i>
+            <input class="filter-input" type="text" placeholder="From, e.g. Saharanpur">
+            <input class="filter-input" type="text" placeholder="To, e.g. University Gangoh">
+            <input class="filter-input" type="text" placeholder="Date (today)">
+            <a href="#"> <button class="filter-btn"><i class="fas fa-sliders-h"></i> find ride</button></a>
+        </div>
+    </div>
+
+    <!-- ride cards (✔) + animated hover (already in css) -->
+    <div class="section" id="ride-section">
+        <div class="section-title"><i class="fas fa-bicycle"></i> Available rides near you</div>
+        <div class="ride-grid">
+            <div class="ride-card">
+                <div class="ride-header">
+                    <span class="rider-avatar"><i class="fas fa-user-graduate"></i></span>
+                    <span class="price-badge">₹25</span>
+                </div>
+                <div class="route">Saharanpur <i class="fas fa-arrow-right"></i> University <small> Gangoh</small></div>
+                <div class="time"><i class="far fa-clock"></i> 8:30 AM · 3 seats left</div>
+                <div><i class="fas fa-star" style="color: gold;"></i> 4.9 · Anjali (ME)</div>
+               <a href="Ride-details.html"> <button class="book-btn"><i class="fas fa-hand-holding-heart"></i> request ride</button></a>
+            </div>
+            <div class="ride-card">
+                <div class="ride-header">
+                    <span class="rider-avatar"><i class="fas fa-user-astronaut"></i></span>
+                    <span class="price-badge">₹30</span>
+                </div>
+                <div class="route">Delhi Rd <i class="fas fa-arrow-right"></i> Library</div>
+                <div class="time"><i class="far fa-clock"></i> 9:15 AM · 2 seats</div>
+                <div><i class="fas fa-star" style="color: gold;"></i> 4.8 · Ravi (CSE)</div>
+                <a href="Ride-details.html"> <button class="book-btn">request ride</button></a>
+            </div>
+            <div class="ride-card">
+                <div class="ride-header">
+                    <span class="rider-avatar"><i class="fas fa-user-nurse"></i></span>
+                    <span class="price-badge">₹20</span>
+                </div>
+                <div class="route">Saharanpur <i class="fas fa-arrow-right"></i> Gate No.3</div>
+                <div class="time"><i class="far fa-clock"></i> 10:00 AM · 1 seat</div>
+                <div><i class="fas fa-star" style="color: gold;"></i> 4.7 · Priya (Biotech)</div>
+                <a href="Ride-details.html"> <button class="book-btn">request ride</button></a>
+            </div>
+            <div class="ride-card">
+                <div class="ride-header">
+                    <span class="rider-avatar"><i class="fas fa-user-tie"></i></span>
+                    <span class="price-badge">₹25</span>
+                </div>
+                <div class="route">New Mandi <i class="fas fa-arrow-right"></i> University</div>
+                <div class="time"><i class="far fa-clock"></i> 11:45 AM · 2 seats</div>
+                <div><i class="fas fa-star" style="color: gold;"></i> 4.9 · Arjun (MBA)</div>
+                <a href="ride-details.html"><button class="book-btn">request ride</button></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- testimonials section (✔) + colorful gradient ui (already there) -->
+    <div class="section" style="background: #eef3ff; border-radius: 3rem;">
+        <div class="section-title"><i class="fas fa-comment-dots"></i> what students say</div>
+        <div class="testimonials">
+            <div class="testi-card">
+                <i class="fas fa-quote-right"></i>
+                <p>“I share my scooty every morning and earn a bit. Super safe, all are from my uni.”</p>
+                <h4>— Divya, 3rd year</h4>
+            </div>
+            <div class="testi-card">
+                <i class="fas fa-quote-right"></i>
+                <p>“Reached Gangoh in 20 mins for just ₹25. Live tracking helped me wait without stress.”</p>
+                <h4>— Karan, 1st year</h4>
+            </div>
+            <div class="testi-card">
+                <i class="fas fa-quote-right"></i>
+                <p>“Emergency button connected to campus security. That’s peace of mind.”</p>
+                <h4>— Simran, PhD</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google campus map (✔) + live bike location tracking (✔)  -->
+    <div class="section" id="map-section">
+        <div class="section-title"><i class="fas fa-map-marked-alt"></i> live campus tracker (google map style)</div>
+        <div class="map-container">
+            <div class="campus-map">
+                <!-- simulated google map with tracking -->
+                <div class="map-overlay">
+                    <div class="live-badge"><span class="bike-marker"></span> 3 bikes moving now</div>
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d110942.21030089123!2d77.50985950410857!3d29.967865428682357!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390eea6a1b1f9a69%3A0xa73b5d1d0b4bc6c6!2sShobhit%20University%2C%20Gangoh!5e0!3m2!1sen!2sin!4v1712324567890!5m2!1sen!2sin"
+                        width="100%" height="100%" style="border:0; border-radius: 2rem;" allowfullscreen=""
+                        loading="lazy"></iframe>
+                </div>
+            </div>
+            <div class="tracking-side">
+                <h4><i class="fas fa-motorcycle"></i> live nearby</h4>
+                <p><i class="fas fa-circle" style="color:#C850C0; font-size: 0.7rem;"></i> Rider Nikhil · 0.3 km away
+                </p>
+                <p><i class="fas fa-circle" style="color:#4158D0; font-size: 0.7rem;"></i> Rider Meera · 0.8 km (towards
+                    uni)</p>
+                <p><i class="fas fa-circle" style="color:#FFCC70; font-size: 0.7rem;"></i> Rider Yash · 1.2 km
+                    (Saharanpur)</p>
+                <hr style="margin: 1rem 0; opacity:0.2;">
+                <p><i class="fas fa-location-dot" style="color:#C850C0;"></i> Your location: Saharanpur bus stand</p>
+                <button class="book-btn" style="background:transparent;">center map</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ride booking notification (✔)  -->
+    <div class="section" style="padding-top: 0;">
+        <div class="booking-notif">
+            <i class="fas fa-bell"></i> You have a booking request from Anjali (Saharanpur → Uni) · accept?
+        </div>
+    </div>
+
+    <!-- profile dashboard (✔) + ride history page (✔) in one row -->
+    <div class="section">
+        <div class="dashboard-row">
+            <!-- left: profile dashboard -->
+            <div class="profile-dash">
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <div class="avatar" style="width:60px; height:60px; font-size: 2rem;">P</div>
+                    <div>
+                        <h3>Pranav Sharma</h3>
+                        <p>CSE 3rd yr · verified <i class="fas fa-check-circle" style="color: #00b8a9;"></i></p>
+                    </div>
+                </div>
+                <div class="stat-item"><span>rides offered</span> <strong>18</strong></div>
+                <div class="stat-item"><span>rides taken</span> <strong>7</strong></div>
+                <div class="stat-item"><span>rating</span> <strong>4.96 ★</strong></div>
+                <div class="stat-item"><span>emergency contact</span> <strong>added</strong></div>
+                <button
+                    style="background: none; border: 2px solid #C850C0; border-radius: 2rem; padding:0.5rem 1.5rem; margin-top:1rem;">edit
+                    profile</button>
+            </div>
+            <!-- right: ride history page snippet -->
+            <div class="history-panel">
+                <h4><i class="fas fa-history"></i> recent trips</h4>
+                <div class="stat-item"><span>21 Mar</span> Saharanpur → Library <span>₹25</span></div>
+                <div class="stat-item"><span>19 Mar</span> Gangoh → Delhi Rd <span>₹30</span></div>
+                <div class="stat-item"><span>18 Mar</span> University → Saharanpur <span>₹20</span></div>
+                <div class="stat-item"><span>16 Mar</span> New Mandi → Gate 3 <span>₹25</span></div>
+                <button style="background:transparent; border:none; color:#C850C0; margin-top:0.5rem;">view all <i
+                        class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- footer with emergency support (just a mention) -->
+    <!-- ===== NEW ATTRACTIVE RESPONSIVE FOOTER ===== -->
+    <footer class="campus-footer">
+        <div class="footer-grid">
+            <!-- col 1: brand & about -->
+            <div class="footer-col">
+                <div class="footer-logo"><i class="fas fa-motorcycle"></i> CampusWheel</div>
+                <p>Smart two-wheeler ride-sharing for university students. Safe, affordable, and verified.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-x-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <!-- col 2: quick links -->
+            <div class="footer-col">
+                <h3>Explore</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-chevron-right" style="font-size: 1rem; margin-right: 8px;"></i>
+                            Available rides</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right" style="font-size: 1rem; margin-right: 8px;"></i>
+                            Live map</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right" style="font-size: 1rem; margin-right: 8px;"></i>
+                            Offer a ride</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right" style="font-size: 1rem; margin-right: 8px;"></i>
+                            Safety tips</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right" style="font-size: 1rem; margin-right: 8px;"></i>
+                            FAQs</a></li>
+                </ul>
+            </div>
+            <!-- col 3: support & legal -->
+            <div class="footer-col">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="#">Help center</a></li>
+                    <li><a href="#">Student verification</a></li>
+                    <li><a href="#">Community guidelines</a></li>
+                    <li><a href="#">Privacy policy</a></li>
+                    <li><a href="#">Terms of use</a></li>
+                </ul>
+            </div>
+            <!-- col 4: contact & emergency -->
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i> <span>support@campuswheel.in</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone-alt"></i> <span>+91 98765 43210</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-pin"></i> <span>Shobhit University, Gangoh</span>
+                </div>
+                <div class="emergency-badge">
+                    <i class="fas fa-shield-heart"></i> <span>24/7 emergency<br> +91 112 233 4455</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- bottom bar -->
+        <div class="footer-bottom">
+            <div class="copyright">
+                <i class="far fa-copyright"></i> 2026 CampusWheel · built for students
+            </div>
+            <div class="footer-bottom-links">
+                <a href="#">Accessibility</a>
+                <a href="#">Cookies</a>
+                <a href="#">Complaints</a>
+            </div>
+        </div>
+    </footer>
+    <!-- tiny interactive for notification simulation -->
+    <script>
+        (function () {
+            // just to make booking notification clickable / fun
+            const notifDiv = document.querySelector('.booking-notif');
+            if (notifDiv) {
+                notifDiv.addEventListener('click', function () {
+                    alert('✅ Ride request accepted! You can chat with Anjali now.');
+                    this.innerText = '✓ accepted — Anjali will pick you up at 8:25 AM';
+                    this.style.background = '#00b8a9';
+                });
+            }
+
+            // hover effect on book buttons shows simple feedback
+            document.querySelectorAll('.book-btn').forEach(btn => {
+               
+            });
+        })();
+    </script>
+</body>
+
+</html>

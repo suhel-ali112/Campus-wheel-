@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusWheel · live map · complete platform</title>
+    <!-- external resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!-- Leaflet (open source map) for live map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        /* === EXTERNAL CSS (styles.css) === */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(145deg, #f4f9ff 0%, #e9f0fa 100%); color: #121826; line-height: 1.5; }
+        :root { 
+            --primary: #2a3ff2; 
+            --primary-light: #dce3ff; 
+            --secondary: #10b981; 
+            --accent: #8b5cf6; 
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            --gradient-2: linear-gradient(145deg, #ff7e5f, #feb47b); 
+            --gradient-3: linear-gradient(145deg, #56ccf2, #2f80ed); 
+            --card-white: rgba(255,255,255,0.9); 
+            --backdrop-blur: blur(16px); 
+            --shadow-color: rgba(0,30,80,0.12); 
+        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 28px; width: 100%; }
+
+        /* navbar */
+        .navbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 28px; background: rgba(255,255,255,0.7); backdrop-filter: var(--backdrop-blur); border-radius: 80px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.7); box-shadow: 0 15px 35px -15px #102040; flex-wrap: wrap; gap: 20px; }
+        .logo { display: flex; align-items: center; gap: 10px; }
+        .logo-icon { background: var(--gradient-1); color: white; width: 44px; height: 44px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 8px 18px -8px var(--primary); }
+        .logo-text { font-weight: 700; font-size: 1.8rem; font-family: 'Space Grotesk', sans-serif; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-links { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
+        .nav-links a { text-decoration: none; font-weight: 600; color: #1e293b; transition: 0.2s; font-size: 1rem; padding: 8px 0; border-bottom: 2px solid transparent; }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 10px 26px; border-radius: 60px; font-weight: 600; border: none; cursor: pointer; transition: 0.2s; background: white; color: #1e293b; box-shadow: 0 6px 12px rgba(0,0,0,0.02); text-decoration: none; border: 1px solid #e2e8f0; }
+        .btn-primary { background: var(--gradient-1); color: white; border: none; box-shadow: 0 12px 18px -10px var(--primary); }
+        .btn-primary:hover { transform: scale(1.03); box-shadow: 0 20px 24px -12px var(--primary); }
+
+        /* live map container (full featured) */
+        .live-map-section {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: var(--backdrop-blur);
+            border-radius: 48px;
+            padding: 28px;
+            margin: 40px 0;
+            border: 1px solid white;
+            box-shadow: 0 25px 40px -20px var(--shadow-color);
+        }
+        .map-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .map-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .live-indicator {
+            background: #ef4444;
+            color: white;
+            padding: 6px 18px;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } }
+        
+        #liveMap {
+            height: 450px;
+            width: 100%;
+            border-radius: 36px;
+            border: 3px solid white;
+            box-shadow: 0 20px 30px -10px #1e293b;
+            z-index: 1;
+        }
+        .map-legend {
+            display: flex;
+            gap: 28px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            background: rgba(255,255,255,0.5);
+            padding: 16px 28px;
+            border-radius: 60px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .bike-marker { color: var(--primary); font-size: 1.5rem; }
+        .rider-marker { color: var(--secondary); }
+
+        /* other sections (shortened for brevity) */
+        .ride-cards-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px; margin: 30px 0; }
+        .ride-card { background: white; border-radius: 32px; padding: 24px; box-shadow: 0 15px 30px -12px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.8); transition: 0.2s; cursor: pointer; }
+        .price { background: var(--secondary); color: white; padding: 6px 16px; border-radius: 40px; display: inline-block; }
+
+        .profile-page { margin: 40px 0; }
+        .profile-cover { background: var(--gradient-1); height: 160px; border-radius: 48px 48px 0 0; }
+        .profile-avatar { position: relative; bottom: 50px; left: 50px; background: white; width: 120px; height: 120px; border-radius: 50%; border: 6px solid white; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; }
+
+        .footer { padding: 40px 0; text-align: center; }
+    </style>
+</head>
+<body>
+    <!-- navbar -->
+    <div class="container">
+        <nav class="navbar">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-motorcycle"></i></div>
+                <span class="logo-text">CampusWheel</span>
+            </div>
+            <div class="nav-links">
+                <a href="#" id="navHome">Home</a>
+                <a href="#" id="navRides">Rides</a>
+                <a href="#" id="navOffer">Offer</a>
+                <a href="#" class="active" id="navMap">Live Map</a>
+                <a href="#" id="navProfile">Profile</a>
+                <a href="#" id="navHistory">History</a>
+                <div class="auth-section">
+                    <div class="auth-btn"><i class="fas fa-user-graduate"></i> Aditya <i class="fas fa-chevron-down"></i></div>
+                    <a href="#" class="btn btn-primary" id="offerRideNav"><i class="fas fa-plus-circle"></i> Offer ride</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- ========== LIVE MAP SECTION ========== -->
+    <div class="container">
+        <div class="live-map-section">
+            <div class="map-header">
+                <h2><i class="fas fa-map-marked-alt"></i> Live campus bike tracking</h2>
+                <span class="live-indicator"><i class="fas fa-circle"></i> 5 bikes online</span>
+            </div>
+            <!-- map container (Leaflet will render here) -->
+            <div id="liveMap"></div>
+            <div class="map-legend">
+                <span class="legend-item"><i class="fas fa-motorcycle bike-marker"></i> Bike owner (live)</span>
+                <span class="legend-item"><i class="fas fa-user-graduate rider-marker"></i> Rider waiting</span>
+                <span class="legend-item"><i class="fas fa-route" style="color: var(--accent);"></i> Active route: Saharanpur → Gangoh</span>
+                <span class="legend-item"><i class="fas fa-sync-alt"></i> Updates every 5s</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ride cards (short preview) -->
+    <div class="container">
+        <h2>🔥 Available rides near you</h2>
+        <div class="ride-cards-container">
+            <div class="ride-card" data-route="Saharanpur → Gangoh" data-price="25">
+                <div><i class="fas fa-user-graduate"></i> Anjali K. ⭐ 4.9</div>
+                <div class="route">Saharanpur → Gangoh · 8:30 AM</div>
+                <div class="price">₹25</div>
+            </div>
+            <div class="ride-card" data-route="Gate → Library" data-price="12">
+                <div><i class="fas fa-user-graduate"></i> Rohan M. ⭐ 4.8</div>
+                <div>Gate → Library · 2:15 PM</div>
+                <div class="price">₹12</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- quick profile summary -->
+    <div class="container">
+        <div class="profile-page" style="margin-top: 20px;">
+            <div class="profile-cover"></div>
+            <div style="background: rgba(255,255,255,0.7); border-radius: 0 0 48px 48px; padding: 20px 40px 30px 40px;">
+                <div class="profile-avatar" style="left: 40px;"><i class="fas fa-graduation-cap"></i></div>
+                <div style="margin-left: 180px;">
+                    <h2>Aditya Sharma · ₹340</h2>
+                    <p><i class="fas fa-star" style="color: #fbbf24;"></i> 4.93 · 47 rides</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- footer -->
+    <div class="container">
+        <footer class="footer">© CampusWheel · live map with Leaflet</footer>
+    </div>
+
+    <!-- scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        (function() {
+            // Initialize live map (Leaflet) with campus view (Shobhit University, Gangoh area)
+            const map = L.map('liveMap').setView([29.9679, 77.5467], 14); // coordinates near Gangoh
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            // custom bike icon (fontawesome simulated with divIcon)
+            const bikeIcon = L.divIcon({
+                html: '<i class="fas fa-motorcycle" style="font-size: 28px; color: #2a3ff2; text-shadow: 2px 2px 5px white;"></i>',
+                className: 'bike-marker-div',
+                iconSize: [30, 30],
+                popupAnchor: [0, -15]
+            });
+
+            const riderIcon = L.divIcon({
+                html: '<i class="fas fa-user-graduate" style="font-size: 28px; color: #10b981;"></i>',
+                className: 'rider-marker-div',
+                iconSize: [30, 30]
+            });
+
+            // add live bike markers (simulated)
+            const bikes = [
+                { lat: 29.9679, lng: 77.5467, label: 'Bike #786 · to Gangoh' },
+                { lat: 29.9572, lng: 77.5321, label: 'Bike #234 · to Library' },
+                { lat: 29.9785, lng: 77.5593, label: 'Bike #551 · to Saharanpur' }
+            ];
+
+            const bikeMarkers = [];
+            bikes.forEach(b => {
+                const marker = L.marker([b.lat, b.lng], { icon: bikeIcon }).addTo(map);
+                marker.bindPopup(`<b>${b.label}</b><br>Speed 28 km/h · 2 seats`);
+                bikeMarkers.push({ marker, baseLat: b.lat, baseLng: b.lng });
+            });
+
+            // add some rider markers (students waiting)
+            L.marker([29.9625, 77.5380], { icon: riderIcon }).addTo(map).bindPopup('Rider waiting · to Gangoh');
+            L.marker([29.9720, 77.5550], { icon: riderIcon }).addTo(map).bindPopup('Rider waiting · to Library');
+
+            // Simulate live movement every 4 seconds (update bike positions slightly)
+            setInterval(() => {
+                bikeMarkers.forEach((item, index) => {
+                    // small random offset to simulate movement toward destination
+                    const newLat = item.baseLat + (Math.random() * 0.002 - 0.001);
+                    const newLng = item.baseLng + (Math.random() * 0.002 - 0.001);
+                    item.marker.setLatLng([newLat, newLng]);
+                    // update base for next iteration (accumulate slowly)
+                    item.baseLat = newLat;
+                    item.baseLng = newLng;
+                });
+                // update live indicator (optional)
+            }, 4000);
+
+            // Add route line example (Saharanpur to Gangoh)
+            const routePoints = [
+                [29.9679, 77.5467],  // near Gangoh campus
+                [29.9550, 77.5200],
+                [29.9400, 77.5000],
+                [29.9200, 77.4750]   // approximate Saharanpur area
+            ];
+            L.polyline(routePoints, { color: 'var(--accent)', weight: 5, opacity: 0.6 }).addTo(map).bindPopup('Active route: Saharanpur → Gangoh');
+
+            // add campus area circle
+            L.circle([29.9679, 77.5467], { radius: 300, color: '#2a3ff2', fillOpacity: 0.1 }).addTo(map).bindPopup('Shobhit University');
+
+            // interaction for ride cards (demo)
+            document.querySelectorAll('.ride-card').forEach(c => {
+                c.addEventListener('click', () => alert('Booking demo (payment)'));
+            });
+
+            // navbar demo handlers
+            document.getElementById('navMap').addEventListener('click', (e) => e.preventDefault());
+            document.getElementById('navHome').addEventListener('click', (e) => { e.preventDefault(); alert('Home'); });
+            document.getElementById('navRides').addEventListener('click', (e) => { e.preventDefault(); alert('Rides'); });
+            document.getElementById('navOffer').addEventListener('click', (e) => { e.preventDefault(); alert('Offer ride'); });
+            document.getElementById('navProfile').addEventListener('click', (e) => { e.preventDefault(); alert('Profile page (demo)'); });
+            document.getElementById('navHistory').addEventListener('click', (e) => { e.preventDefault(); alert('History'); });
+            document.getElementById('offerRideNav').addEventListener('click', (e) => { e.preventDefault(); alert('Offer ride'); });
+        })();
+    </script>
+</body>
+</html>
